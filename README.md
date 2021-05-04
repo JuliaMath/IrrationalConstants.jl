@@ -1,2 +1,2 @@
-# MathematicalConstants.jl
-defines additional irrationals
+# IrrationalConstants.jl
+defines additional mathematical constants
