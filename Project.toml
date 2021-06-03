@@ -1,0 +1,13 @@
+name = "IrrationalConstants"
+uuid = "92d709cd-6900-40b7-9082-c6be49f344b6"
+authors = ["JuliaMath"]
+version = "0.1.0"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
