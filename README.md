@@ -1,5 +1,9 @@
 # IrrationalConstants.jl
 
+[![Build Status](https://github.com/JuliaMath/IrrationalConstants.jl/workflows/CI/badge.svg?branch=main)](https://github.com/JuliaMath/IrrationalConstants.jl/actions/workflows/CI.yml?query=branch%3Amain)
+[![Coverage](https://codecov.io/gh/JuliaMath/IrrationalConstants.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaMath/IrrationalConstants.jl)
+[![Coverage](https://coveralls.io/repos/github/JuliaMath/IrrationalConstants.jl/badge.svg?branch=main)](https://coveralls.io/github/JuliaMath/IrrationalConstants.jl?branch=main)
+
 This package defines the following irrational constants:
 
 ```julia
