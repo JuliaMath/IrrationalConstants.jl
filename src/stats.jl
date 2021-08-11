@@ -4,14 +4,13 @@
 @irrational fourπ     12.566370614359172954 4 * big(π)
 @irrational halfπ     1.5707963267948966192 big(π) / 2
 @irrational quartπ    0.7853981633974483096 big(π) / 4
-@irrational halfsqrtπ 0.886226925452758 sqrt(big(π)) / 2
 
-@irrational invπ        0.31830988618379067154 inv(big(π))
-@irrational twoinvsqrtπ 1.1283791670955126 2 / sqrt(big(π))
-@irrational twoinvπ     0.63661977236758134308 2 / big(π)
-@irrational fourinvπ    1.27323954473516268615 4 / big(π)
-@irrational inv2π       0.159154943091895335769 inv(2 * big(π))
-@irrational inv4π       0.079577471545947667884 inv(4 * big(π))
+@irrational invπ     0.31830988618379067154 inv(big(π))
+@irrational invsqrtπ 1.1283791670955126 inv(sqrt(big(π)))
+@irrational twoinvπ  0.63661977236758134308 2 / big(π)
+@irrational fourinvπ 1.27323954473516268615 4 / big(π)
+@irrational inv2π    0.159154943091895335769 inv(2 * big(π))
+@irrational inv4π    0.079577471545947667884 inv(4 * big(π))
 
 @irrational sqrt2     1.4142135623730950488 sqrt(big(2))
 @irrational sqrt3     1.7320508075688772935 sqrt(big(3))
