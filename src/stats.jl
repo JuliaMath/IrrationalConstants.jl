@@ -1,9 +1,9 @@
 # mathematical constants related to statistics
 
-@irrational twoπ      6.2831853071795864769 2 * big(π)
-@irrational fourπ     12.566370614359172954 4 * big(π)
-@irrational halfπ     1.5707963267948966192 big(π) / 2
-@irrational quartπ    0.7853981633974483096 big(π) / 4
+@irrational twoπ   6.2831853071795864769 2 * big(π)
+@irrational fourπ  12.566370614359172954 4 * big(π)
+@irrational halfπ  1.5707963267948966192 big(π) / 2
+@irrational quartπ 0.7853981633974483096 big(π) / 4
 
 @irrational invπ     0.31830988618379067154 inv(big(π))
 @irrational invsqrtπ 1.1283791670955126 inv(sqrt(big(π)))
