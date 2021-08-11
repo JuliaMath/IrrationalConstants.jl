@@ -6,7 +6,6 @@
 @irrational quartπ 0.7853981633974483096 big(π) / 4
 
 @irrational invπ     0.31830988618379067154 inv(big(π))
-@irrational invsqrtπ 1.1283791670955126 inv(sqrt(big(π)))
 @irrational twoinvπ  0.63661977236758134308 2 / big(π)
 @irrational fourinvπ 1.27323954473516268615 4 / big(π)
 @irrational inv2π    0.159154943091895335769 inv(2 * big(π))
@@ -20,6 +19,7 @@
 @irrational sqrthalfπ 1.2533141373155002512 sqrt(big(π) / 2)
 
 @irrational invsqrt2  0.7071067811865475244 inv(sqrt(big(2)))
+@irrational invsqrtπ  1.1283791670955126 inv(sqrt(big(π)))
 @irrational invsqrt2π 0.3989422804014326779 inv(sqrt(2 * big(π)))
 
 @irrational loghalf -0.6931471805599453094 log(inv(big(2)))
