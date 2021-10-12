@@ -19,7 +19,7 @@
 @irrational sqrthalfπ 1.2533141373155002512 sqrt(big(π) / 2)
 
 @irrational invsqrt2  0.7071067811865475244 inv(sqrt(big(2)))
-@irrational invsqrtπ  1.1283791670955126 inv(sqrt(big(π)))
+@irrational invsqrtπ  0.5641895835477563 inv(sqrt(big(π)))
 @irrational invsqrt2π 0.3989422804014326779 inv(sqrt(2 * big(π)))
 
 @irrational loghalf -0.6931471805599453094 log(inv(big(2)))
