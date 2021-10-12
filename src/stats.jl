@@ -24,7 +24,7 @@
 
 @irrational loghalf -0.6931471805599453094 log(inv(big(2)))
 @irrational logtwo  0.6931471805599453094 log2
-@irrational logten  2.302585092994046 log10
+@irrational logten  2.302585092994046 log10(big(π))
 @irrational logπ    1.1447298858494001741 log(big(π))
 @irrational log2π   1.8378770664093454836 log(2 * big(π))
 @irrational log4π   2.5310242469692907930 log(4 * big(π))
