@@ -28,3 +28,5 @@
 @irrational logπ    1.1447298858494001741 log(big(π))
 @irrational log2π   1.8378770664093454836 log(2 * big(π))
 @irrational log4π   2.5310242469692907930 log(4 * big(π))
+
+@irrational invℯ    0.367879441171442321595 inv(big(ℯ))
