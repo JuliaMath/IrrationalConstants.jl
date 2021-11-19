@@ -27,8 +27,11 @@ export
     logπ,       # log(π)
     log2π,      # log(2π)
     log4π,      # log(4π)
-    invℯ        # 1 / ℯ
+    invℯ,       # 1 / ℯ
+
+    LambertW_Ω  # Ω exp(Ω) = 1
 
 include("stats.jl")
+include("lambertw_omega.jl")
 
 end # module
