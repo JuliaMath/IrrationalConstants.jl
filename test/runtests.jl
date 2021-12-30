@@ -49,8 +49,20 @@ end
   @test isapprox(lambertw_Ω * exp(lambertw_Ω), 1)
   @test lambertw_Omega == lambertw_Ω
 
+  # lower than default precision
+  setprecision(BigFloat, 196) do
+    o = big(lambertw_Ω)
+    @test precision(o) == 196
+    @test isapprox(o * exp(o), 1, atol=eps(BigFloat))
+
+    oalias = big(lambertw_Omega)
+    @test o == oalias
+  end
+
+  # higher than default precision
   setprecision(BigFloat, 2048) do
     o = big(lambertw_Ω)
+    @test precision(o) == 2048
     @test isapprox(o * exp(o), 1, atol=eps(BigFloat))
 
     oalias = big(lambertw_Omega)

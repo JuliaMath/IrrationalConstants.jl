@@ -5,9 +5,9 @@ const lambertw_Omega_BigFloat256 = Ref{BigFloat}()
 function compute_lambertw_Omega()
     # initialize lambertw_Omega_BigFloat256
     isassigned(lambertw_Omega_BigFloat256) ||
-        (lambertw_Omega_BigFloat256[] = BigFloat("0.5671432904097838729999686622103555497538157871865125081351310792230457930866845666932194"))
-    o = lambertw_Omega_BigFloat256[] # initial value
-    precision(BigFloat) <= 256 && return o
+        (lambertw_Omega_BigFloat256[] = BigFloat("0.5671432904097838729999686622103555497538157871865125081351310792230457930866845666932194", 256))
+    o = BigFloat(lambertw_Omega_BigFloat256[]) # initial value with current precision
+    precision(o) <= 256 && return o
     # iteratively improve the precision of the constant
     myeps = eps(BigFloat)
     for _ in 1:100
