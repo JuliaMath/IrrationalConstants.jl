@@ -2,7 +2,8 @@
 function compute_lambertw_Omega()
     o = BigFloat("0.5671432904097838729999686622103555497538157871865125081351310792230457930866845666932194")
     precision(o) <= 256 && return o
-    # iteratively improve the precision of the constant
+    # iteratively improve the precision
+    # see https://en.wikipedia.org/wiki/Omega_constant#Computation
     myeps = eps(BigFloat)
     for _ in 1:100
         o_ = (1 + o) / (1 + exp(o))
