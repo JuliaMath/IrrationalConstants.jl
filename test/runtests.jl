@@ -42,6 +42,7 @@ end
 
 @testset "1/e" begin
   @test isapprox(invℯ, exp(-1))
+  @test isapprox(inve, exp(-1))
 end
 
 @testset "LambertW_Omega" begin
