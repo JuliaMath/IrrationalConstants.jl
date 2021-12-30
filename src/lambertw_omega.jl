@@ -22,11 +22,14 @@ end
 const lambertw_Omega = lambertw_Ω # ASCII alias
 
 """
-Lambert's Omega (Ω) constant, such that Ω exp(Ω) = 1.
+Lambert's Omega (*Ω*) constant.
 
-*W(Ω) = 1*, where *W(t) = t exp(t)* is the *Lambert's W function*.
+Lambert's *Ω* is the solution to *W(Ω) = 1* equation,
+where *W(t) = t exp(t)* is the
+[Lambert's *W* function](https://en.wikipedia.org/wiki/Lambert_W_function).
 
-# See
-https://en.wikipedia.org/wiki/Omega_constant
+# See also
+  * https://en.wikipedia.org/wiki/Omega_constant
+  * [`lambertw()`][@ref SpecialFunctions.lambertw]
 """
 lambertw_Ω
