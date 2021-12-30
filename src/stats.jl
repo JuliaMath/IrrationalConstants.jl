@@ -30,3 +30,4 @@
 @irrational log4π   2.5310242469692907930 log(4 * big(π))
 
 @irrational invℯ    0.367879441171442321595 inv(big(ℯ))
+const inve = invℯ # ASCII alias
