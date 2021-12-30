@@ -5,11 +5,12 @@ function compute_lambertw_Omega()
     # iteratively improve the precision
     # see https://en.wikipedia.org/wiki/Omega_constant#Computation
     myeps = eps(BigFloat)
-    for _ in 1:100
+    for _ in 1:1000
         o_ = (1 + o) / (1 + exp(o))
-        abs(o - o_) <= myeps && break
+        abs(o - o_) <= myeps && return o
         o = o_
     end
+    @warn "lambertw_Omega precision is less than current BigFloat precision ($(precision(BigFloat)))"
     return o
 end
 
