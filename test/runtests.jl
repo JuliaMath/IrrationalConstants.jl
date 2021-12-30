@@ -45,10 +45,15 @@ end
   @test isapprox(inve, exp(-1))
 end
 
-@testset "LambertW_Omega" begin
-  @test isapprox(LambertW_Ω * exp(LambertW_Ω), 1)
+@testset "lambertw_Omega" begin
+  @test isapprox(lambertw_Ω * exp(lambertw_Ω), 1)
+  @test lambertw_Omega == lambertw_Ω
+
   setprecision(BigFloat, 2048) do
-    o = big(LambertW_Ω)
+    o = big(lambertw_Ω)
     @test isapprox(o * exp(o), 1, atol=eps(BigFloat))
+
+    oalias = big(lambertw_Omega)
+    @test o == oalias
   end
 end

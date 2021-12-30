@@ -1,12 +1,12 @@
 # lazy-initialized LambertW Omega at 256-bit precision
-const LambertW_Omega_BigFloat256 = Ref{BigFloat}()
+const lambertw_Omega_BigFloat256 = Ref{BigFloat}()
 
 # compute BigFloat Omega constant at arbitrary precision
-function compute_LambertW_Omega()
-    # initialize Omega_BigFloat256
-    isassigned(LambertW_Omega_BigFloat256) ||
-        (LambertW_Omega_BigFloat256[] = BigFloat("0.5671432904097838729999686622103555497538157871865125081351310792230457930866845666932194"))
-    o = LambertW_Omega_BigFloat256[] # initial value
+function compute_lambertw_Omega()
+    # initialize lambertw_Omega_BigFloat256
+    isassigned(lambertw_Omega_BigFloat256) ||
+        (lambertw_Omega_BigFloat256[] = BigFloat("0.5671432904097838729999686622103555497538157871865125081351310792230457930866845666932194"))
+    o = lambertw_Omega_BigFloat256[] # initial value
     precision(BigFloat) <= 256 && return o
     # iteratively improve the precision of the constant
     myeps = eps(BigFloat)
@@ -18,7 +18,8 @@ function compute_LambertW_Omega()
     return o
 end
 
-@irrational LambertW_Ω 0.567143290409783872999968662210355 compute_LambertW_Omega()
+@irrational lambertw_Ω 0.567143290409783872999968662210355 compute_lambertw_Omega()
+const lambertw_Omega = lambertw_Ω # ASCII alias
 
 """
 Lambert's Omega (Ω) constant, such that Ω exp(Ω) = 1.
@@ -28,5 +29,4 @@ Lambert's Omega (Ω) constant, such that Ω exp(Ω) = 1.
 # See
 https://en.wikipedia.org/wiki/Omega_constant
 """
-LambertW_Ω
-
+lambertw_Ω
