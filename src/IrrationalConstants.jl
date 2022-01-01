@@ -29,7 +29,7 @@ export
     log4π,      # log(4π)
     invℯ, inve, # 1 / ℯ
 
-    lambertw_Ω, lambertw_Omega  # Ω exp(Ω) = 1
+    LambertW    # module that defines Lambert'W Ω: Ω*exp(Ω) = 1
 
 include("stats.jl")
 include("lambertw_omega.jl")

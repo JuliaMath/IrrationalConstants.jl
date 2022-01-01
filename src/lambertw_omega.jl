@@ -10,12 +10,13 @@ function compute_lambertw_Omega()
         abs(o - o_) <= myeps && return o
         o = o_
     end
-    @warn "lambertw_Omega precision is less than current BigFloat precision ($(precision(BigFloat)))"
+    @warn "Omega precision is less than current BigFloat precision ($(precision(BigFloat)))"
     return o
 end
 
-@irrational lambertw_Ω 0.567143290409783872999968662210355 compute_lambertw_Omega()
-const lambertw_Omega = lambertw_Ω # ASCII alias
+@irrational lambertw_Omega 0.567143290409783872999968662210355 compute_lambertw_Omega()
+
+module LambertW
 
 """
 Lambert's Omega (*Ω*) constant.
@@ -28,4 +29,7 @@ where *W(t) = t exp(t)* is the
   * https://en.wikipedia.org/wiki/Omega_constant
   * [`lambertw()`][@ref SpecialFunctions.lambertw]
 """
-lambertw_Ω
+const Ω = parentmodule(@__MODULE__).lambertw_Omega
+const Omega = parentmodule(@__MODULE__).lambertw_Omega # ASCII alias
+
+end
