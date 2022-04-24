@@ -86,11 +86,14 @@ end
     @testset "log" begin
         if a > 0
             test_with_function(log, a)
+        else
+            @test_throws DomainError log(a)
         end
     end
 
     @testset "inv" begin
         test_with_function(inv, a)
+        test_with_function(t->t^-1, a)
     end
 
     @testset "exp" begin
@@ -105,5 +108,7 @@ end
 
     @testset "square" begin
         test_with_function(t->t*t, a)
+        test_with_function(abs2, a)
+        test_with_function(t->t^2, a)
     end
 end
