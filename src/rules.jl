@@ -1,5 +1,5 @@
 ## Square
-SQUARE_PAIR = (
+SQUARE_PAIRS = (
     (sqrt2, 2.0),
     (sqrt3, 3.0),
     (sqrtπ, π),
@@ -10,13 +10,13 @@ SQUARE_PAIR = (
     (invsqrtπ, invπ),
     (invsqrt2π, inv2π),
 )
-for (a,b) in SQUARE_PAIR
+for (a,b) in SQUARE_PAIRS
     Base.:(*)(::typeof(a), ::typeof(a)) = b
     Base.literal_pow(::typeof(^), ::typeof(a), ::Val{2}) = b
 end
 
 ## Inverse
-INVERSE_PAIR = (
+INVERSE_PAIRS = (
     (π, invπ),
     (twoπ, inv2π),
     (twoinvπ, halfπ),
@@ -26,7 +26,7 @@ INVERSE_PAIR = (
     (sqrt2, invsqrt2),
     (sqrtπ, invsqrtπ),
 )
-for (a,b) in INVERSE_PAIR
+for (a,b) in INVERSE_PAIRS
     if a !== π  # Avoid type piracy
         Base.inv(::typeof(a)) = b
         Base.literal_pow(::typeof(^), ::typeof(a), ::Val{-1}) = b
