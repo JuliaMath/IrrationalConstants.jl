@@ -29,5 +29,6 @@ export
     log4π       # log(4π)
 
 include("stats.jl")
+include("rules.jl")
 
 end # module
