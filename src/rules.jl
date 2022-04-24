@@ -1,31 +1,40 @@
 ## Square
-Base.:*(::Irrational{:sqrt2}, ::Irrational{:sqrt2}) = 2.0
-Base.:*(::Irrational{:sqrt3}, ::Irrational{:sqrt3}) = 3.0
-Base.:*(::Irrational{:sqrtπ}, ::Irrational{:sqrtπ}) = π
-Base.:*(::Irrational{:sqrt2π}, ::Irrational{:sqrt2π}) = twoπ
-Base.:*(::Irrational{:sqrt4π}, ::Irrational{:sqrt4π}) = fourπ
-Base.:*(::Irrational{:sqrthalfπ}, ::Irrational{:sqrthalfπ}) = halfπ
-Base.:*(::Irrational{:invsqrt2}, ::Irrational{:invsqrt2}) = 0.5
-Base.:*(::Irrational{:invsqrtπ}, ::Irrational{:invsqrtπ}) = invπ
-Base.:*(::Irrational{:invsqrt2π}, ::Irrational{:invsqrt2π}) = inv2π
+SQUARE_PAIR = (
+    (sqrt2, 2.0),
+    (sqrt3, 3.0),
+    (sqrtπ, π),
+    (sqrt2π, twoπ),
+    (sqrt4π, fourπ),
+    (sqrthalfπ, halfπ),
+    (invsqrt2, 0.5),
+    (invsqrtπ, invπ),
+    (invsqrt2π, inv2π),
+)
+for (a,b) in SQUARE_PAIR
+    Base.:(*)(::typeof(a), ::typeof(a)) = b
+    Base.literal_pow(::typeof(^), ::typeof(a), ::Val{2}) = b
+end
 
 ## Inverse
-# Base.inv(::Irrational{:π}) = invπ  # Avoid type piracy
-Base.inv(::Irrational{:invπ}) = π
-Base.inv(::Irrational{:twoπ}) = inv2π
-Base.inv(::Irrational{:inv2π}) = twoπ
-Base.inv(::Irrational{:twoinvπ}) = halfπ
-Base.inv(::Irrational{:halfπ}) = twoinvπ
-Base.inv(::Irrational{:quartπ}) = fourinvπ
-Base.inv(::Irrational{:fourinvπ}) = quartπ
-Base.inv(::Irrational{:fourπ}) = inv4π
-Base.inv(::Irrational{:inv4π}) = fourπ
-Base.inv(::Irrational{:sqrt2π}) = invsqrt2π
-Base.inv(::Irrational{:invsqrt2π}) = sqrt2π
-Base.inv(::Irrational{:sqrt2}) = invsqrt2
-Base.inv(::Irrational{:invsqrt2}) = sqrt2
-Base.inv(::Irrational{:sqrtπ}) = invsqrtπ
-Base.inv(::Irrational{:invsqrtπ}) = sqrtπ
+INVERSE_PAIR = (
+    (π, invπ),
+    (twoπ, inv2π),
+    (twoinvπ, halfπ),
+    (quartπ, fourinvπ),
+    (fourπ, inv4π),
+    (sqrt2π, invsqrt2π),
+    (sqrt2, invsqrt2),
+    (sqrtπ, invsqrtπ),
+)
+for (a,b) in INVERSE_PAIR
+    if a !== π  # Avoid type piracy
+        Base.inv(::typeof(a)) = b
+        Base.literal_pow(::typeof(^), ::typeof(a), ::Val{-1}) = b
+    end
+    Base.inv(::typeof(b)) = a
+    Base.literal_pow(::typeof(^), ::typeof(b), ::Val{-1}) = a
+    Base.:(*)(::typeof(a), ::typeof(b)) = one(Irrational)
+end
 
 ## Triangular
 Base.sin(::Irrational{:twoπ}) = 0.0
