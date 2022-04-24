@@ -29,8 +29,16 @@ const IRRATIONALS = (
 )
 
 function test_with_function(f, a::Irrational)
-    @test f(a) ≈ f(float(a)) atol=1e-14
-    @test (f(a) .≈ IRRATIONALS) == (f(a) .=== IRRATIONALS)
+    b = f(a)
+    @test b ≈ f(float(a)) atol=1e-14
+
+    # If f(a) is approximately equal to a value in IRRATIONALS, f(a) should be Irrational.
+    @test (b .≈ IRRATIONALS) == (b .=== IRRATIONALS)
+
+    # If f(a) is close to integer, it should be a integer.
+    if abs(b - round(b)) < 1e-14
+        @test isinteger(b)
+    end
 end
 
 @testset "approximately equal" begin
