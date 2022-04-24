@@ -38,6 +38,8 @@ Base.sin(::Irrational{:quartπ}) = invsqrt2
 Base.cos(::Irrational{:quartπ}) = invsqrt2
 Base.sincos(::Irrational{:quartπ}) = (invsqrt2, invsqrt2)
 Base.sin(::Irrational{:halfπ}) = 1.0
+Base.cos(::Irrational{:halfπ}) = 0.0
+Base.sincos(::Irrational{:halfπ}) = (1.0, 0.0)
 
 ## Exponential
 Base.exp(::Irrational{:loghalf}) = 0.5
