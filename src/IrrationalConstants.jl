@@ -26,7 +26,8 @@ export
     logten,     # log(10)
     logπ,       # log(π)
     log2π,      # log(2π)
-    log4π       # log(4π)
+    log4π,      # log(4π)
+    invℯ, inve # 1 / ℯ
 
 include("stats.jl")
 
