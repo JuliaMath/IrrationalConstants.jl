@@ -1,39 +1,41 @@
 ## Square
-SQUARE_PAIRS = (
-    (sqrt2, 2.0),
-    (sqrt3, 3.0),
-    (sqrtπ, π),
-    (sqrt2π, twoπ),
-    (sqrt4π, fourπ),
-    (sqrthalfπ, halfπ),
-    (invsqrt2, 0.5),
-    (invsqrtπ, invπ),
-    (invsqrt2π, inv2π),
-)
-for (a,b) in SQUARE_PAIRS
-    Base.:(*)(::typeof(a), ::typeof(a)) = b
-    Base.literal_pow(::typeof(^), ::typeof(a), ::Val{2}) = b
+let SQUARE_PAIRS = (
+        (sqrt2, 2.0),
+        (sqrt3, 3.0),
+        (sqrtπ, π),
+        (sqrt2π, twoπ),
+        (sqrt4π, fourπ),
+        (sqrthalfπ, halfπ),
+        (invsqrt2, 0.5),
+        (invsqrtπ, invπ),
+        (invsqrt2π, inv2π),
+    )
+    for (a,b) in SQUARE_PAIRS
+        Base.:(*)(::typeof(a), ::typeof(a)) = b
+        Base.literal_pow(::typeof(^), ::typeof(a), ::Val{2}) = b
+    end
 end
 
 ## Inverse
-INVERSE_PAIRS = (
-    (π, invπ),
-    (twoπ, inv2π),
-    (twoinvπ, halfπ),
-    (quartπ, fourinvπ),
-    (fourπ, inv4π),
-    (sqrt2π, invsqrt2π),
-    (sqrt2, invsqrt2),
-    (sqrtπ, invsqrtπ),
-)
-for (a,b) in INVERSE_PAIRS
-    if a !== π  # Avoid type piracy
-        Base.inv(::typeof(a)) = b
-        Base.literal_pow(::typeof(^), ::typeof(a), ::Val{-1}) = b
+let INVERSE_PAIRS = (
+        (π, invπ),
+        (twoπ, inv2π),
+        (twoinvπ, halfπ),
+        (quartπ, fourinvπ),
+        (fourπ, inv4π),
+        (sqrt2π, invsqrt2π),
+        (sqrt2, invsqrt2),
+        (sqrtπ, invsqrtπ),
+    )
+    for (a,b) in INVERSE_PAIRS
+        if a !== π  # Avoid type piracy
+            Base.inv(::typeof(a)) = b
+            Base.literal_pow(::typeof(^), ::typeof(a), ::Val{-1}) = b
+        end
+        Base.inv(::typeof(b)) = a
+        Base.literal_pow(::typeof(^), ::typeof(b), ::Val{-1}) = a
+        Base.:(*)(::typeof(a), ::typeof(b)) = one(Irrational)
     end
-    Base.inv(::typeof(b)) = a
-    Base.literal_pow(::typeof(^), ::typeof(b), ::Val{-1}) = a
-    Base.:(*)(::typeof(a), ::typeof(b)) = one(Irrational)
 end
 
 ## Triangular
