@@ -32,8 +32,10 @@ function test_with_function(f, a::Irrational)
     b = f(a)
     @test b ≈ f(float(a)) atol=1e-14
 
-    # If f(a) is approximately equal to a value in IRRATIONALS, f(a) should be Irrational.
-    @test (b .≈ IRRATIONALS) == (b .=== IRRATIONALS)
+    # The output type can be Irrational, but we enforces Float64 for now.
+    # # If f(a) is approximately equal to a value in IRRATIONALS, f(a) should be Irrational.
+    # @test (b .≈ IRRATIONALS) == (b .=== IRRATIONALS)
+    @test b isa Float64
 
     # If f(a) is close to integer, it should be a integer.
     if abs(b - round(b)) < 1e-14
