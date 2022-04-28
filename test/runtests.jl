@@ -1,5 +1,6 @@
 using IrrationalConstants
 using Test
+using Compat
 
 const IRRATIONALS = (
     twoπ,
