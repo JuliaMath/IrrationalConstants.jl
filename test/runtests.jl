@@ -83,7 +83,7 @@ end
 end
 
 @testset "rules for $(a)" for a in IRRATIONALS
-    @testset "log" begin
+    @testset "Logarithm" begin
         if a > 0
             test_with_function(log, a)
         else
@@ -91,22 +91,22 @@ end
         end
     end
 
-    @testset "inv" begin
+    @testset "Inverse" begin
         test_with_function(inv, a)
         test_with_function(t->t^-1, a)
     end
 
-    @testset "exp" begin
+    @testset "Exponential" begin
         test_with_function(exp, a)
     end
 
-    @testset "sin" begin
+    @testset "Triangular" begin
         test_with_function(sin, a)
         test_with_function(cos, a)
         @test sincos(a) == (sin(a),cos(a))
     end
 
-    @testset "square" begin
+    @testset "Square" begin
         test_with_function(t->t*t, a)
         test_with_function(abs2, a)
         test_with_function(t->t^2, a)
