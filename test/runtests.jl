@@ -29,6 +29,17 @@ const IRRATIONALS = (
     log4π,
 )
 
+const INVERSE_PAIRS = (
+    (π, invπ),
+    (twoπ, inv2π),
+    (twoinvπ, halfπ),
+    (quartπ, fourinvπ),
+    (fourπ, inv4π),
+    (sqrt2π, invsqrt2π),
+    (sqrt2, invsqrt2),
+    (sqrtπ, invsqrtπ),
+)
+
 function test_with_function(f, a::Irrational)
     b = f(a)
     @test b ≈ f(float(a)) atol=1e-14
@@ -114,4 +125,9 @@ end
         test_with_function(abs2, a)
         test_with_function(t->t^2, a)
     end
+end
+
+@testset "Multiplicative inverse for (a,b)" for (a,b) in INVERSE_PAIRS
+    @test a*b === 1.0
+    @test b*a === 1.0
 end
