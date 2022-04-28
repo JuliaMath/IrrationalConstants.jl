@@ -36,6 +36,7 @@ let INVERSE_PAIRS = (
         Base.inv(::typeof(b)) = Float64(a)
         Base.literal_pow(::typeof(^), ::typeof(b), ::Val{-1}) = Float64(a)
         Base.:(*)(::typeof(a), ::typeof(b)) = 1.0  # This can be one(Irrational).
+        Base.:(*)(::typeof(b), ::typeof(a)) = 1.0  # This can be one(Irrational).
     end
 end
 
