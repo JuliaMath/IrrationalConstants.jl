@@ -47,6 +47,14 @@ end
   @test twoπ isa AbstractIrrational
 end
 
+@testset "hash" begin
+  for i in (twoπ, invπ, sqrt2, logtwo)
+    for j in (twoπ, invπ, sqrt2, logtwo)
+      @test isequal(i==j, hash(i)==hash(j))
+    end
+  end
+end
+
 @testset "doctests" begin
   DocMeta.setdocmeta!(
     IrrationalConstants, :DocTestSetup, :(using IrrationalConstants); recursive=true
