@@ -1,4 +1,5 @@
 using IrrationalConstants
+using Documenter
 using Test
 
 @testset "k*pi" begin
@@ -40,3 +41,9 @@ end
   @test isapprox(log(4pi), log4π)
 end
 
+@testset "doctests" begin
+  DocMeta.setdocmeta!(
+    IrrationalConstants, :DocTestSetup, :(using IrrationalConstants); recursive=true
+  )
+  doctest(IrrationalConstants; manual=false)
+end

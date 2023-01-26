@@ -1,7 +1,5 @@
 module IrrationalConstants
 
-using Base: @irrational
-
 export
     twoπ,       # 2π
     fourπ,      # 4π
@@ -28,6 +26,7 @@ export
     log2π,      # log(2π)
     log4π       # log(4π)
 
+include("macro.jl")
 include("stats.jl")
 
 end # module
