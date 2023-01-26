@@ -17,6 +17,20 @@ Base.:<(::T, ::T) where {T<:IrrationalConstant} = false
 Base.:<=(::T, ::T) where {T<:IrrationalConstant} = true
 Base.hash(x::IrrationalConstant, h::UInt) = 3*objectid(x) - h
 
+# definitions for AbstractIrrational added in https://github.com/JuliaLang/julia/pull/34773
+if VERSION < v"1.5.0-DEV.301"
+    Base.zero(::IrrationalConstant) = false
+    Base.zero(::Type{<:IrrationalConstant}) = false
+
+    Base.one(::IrrationalConstant) = true
+    Base.one(::Type{<:IrrationalConstant}) = true
+end
+
+# definition for AbstractIrrational added in https://github.com/JuliaLang/julia/pull/31068
+if VERSION < v"1.2.0-DEV.337"
+    Base.inv(x::IrrationalConstant) = 1/x
+end
+
 """
     @irrational sym val def [T]
     @irrational(sym, val, def[, T])

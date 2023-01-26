@@ -41,9 +41,89 @@ end
   @test isapprox(log(4pi), log4π)
 end
 
+@testset "type system" begin
+  @test twoπ === IrrationalConstants.Twoπ()
+  @test twoπ isa IrrationalConstants.IrrationalConstant
+  @test twoπ isa AbstractIrrational
+end
+
 @testset "doctests" begin
   DocMeta.setdocmeta!(
     IrrationalConstants, :DocTestSetup, :(using IrrationalConstants); recursive=true
   )
   doctest(IrrationalConstants; manual=false)
+end
+
+# copied from https://github.com/JuliaLang/julia/blob/cf5ae0369ceae078cf6a29d7aa34f48a5a53531e/test/numbers.jl
+# and adapted to irrationals in this package
+
+@testset "IrrationalConstant zero and one" begin
+  @test one(twoπ) === true
+  @test zero(twoπ) === false
+  @test one(typeof(twoπ)) === true
+  @test zero(typeof(twoπ)) === false
+end
+
+@testset "IrrationalConstants compared with IrrationalConstants" begin
+  for i in (twoπ, invπ, sqrt2, logtwo)
+    for j in (twoπ, invπ, sqrt2, logtwo)
+      @test isequal(i==j, Float64(i)==Float64(j))
+      @test isequal(i!=j, Float64(i)!=Float64(j))
+      @test isequal(i<=j, Float64(i)<=Float64(j))
+      @test isequal(i>=j, Float64(i)>=Float64(j))
+      @test isequal(i<j, Float64(i)<Float64(j))
+      @test isequal(i>j, Float64(i)>Float64(j))
+    end
+  end
+end
+
+@testset "IrrationalConstant Inverses, JuliaLang/Julia Issue #30882" begin
+  @test @inferred(inv(twoπ)) ≈ 0.15915494309189535
+end
+
+@testset "IrrationalConstants compared with Rationals and Floats" begin
+  @test Float64(twoπ, RoundDown) < twoπ
+  @test Float64(twoπ, RoundUp) > twoπ
+  @test !(Float64(twoπ, RoundDown) > twoπ)
+  @test !(Float64(twoπ, RoundUp) < twoπ)
+  @test Float64(twoπ, RoundDown) <= twoπ
+  @test Float64(twoπ, RoundUp) >= twoπ
+  @test Float64(twoπ, RoundDown) != twoπ
+  @test Float64(twoπ, RoundUp) != twoπ
+
+  @test Float32(twoπ, RoundDown) < twoπ
+  @test Float32(twoπ, RoundUp) > twoπ
+  @test !(Float32(twoπ, RoundDown) > twoπ)
+  @test !(Float32(twoπ, RoundUp) < twoπ)
+
+  @test prevfloat(big(twoπ)) < twoπ
+  @test nextfloat(big(twoπ)) > twoπ
+  @test !(prevfloat(big(twoπ)) > twoπ)
+  @test !(nextfloat(big(twoπ)) < twoπ)
+
+  @test 5293386250278608690//842468587426513207 < twoπ
+  @test !(5293386250278608690//842468587426513207 > twoπ)
+  @test 5293386250278608690//842468587426513207 != twoπ
+end
+IrrationalConstants.@irrational i46051 4863.185427757 1548big(pi)
+@testset "IrrationalConstant printing" begin
+  @test sprint(show, "text/plain", twoπ) == "twoπ = 6.2831853071795..."
+  @test sprint(show, "text/plain", twoπ, context=:compact => true) == "twoπ"
+  @test sprint(show, twoπ) == "twoπ"
+  # JuliaLang/Julia issue #46051
+  @test sprint(show, "text/plain", i46051) == "i46051 = 4863.185427757..."
+end
+
+@testset "IrrationalConstant/Bool multiplication" begin
+  @test false*twoπ === 0.0
+  @test twoπ*false === 0.0
+  @test true*twoπ === Float64(twoπ)
+  @test twoπ*true === Float64(twoπ)
+end
+
+# JuliaLang/Julia issue #26324
+@testset "irrational promotion" begin
+  @test twoπ*ComplexF32(2) isa ComplexF32
+  @test twoπ/ComplexF32(2) isa ComplexF32
+  @test log(twoπ, ComplexF32(2)) isa ComplexF32
 end
