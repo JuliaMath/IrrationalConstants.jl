@@ -60,7 +60,7 @@ macro irrational(sym, val, def, T=Symbol(uppercasefirst(string(sym))))
             function Base.BigFloat(::$eT)
                 c = BigFloat()
                 ccall(($(string("mpfr_const_", def)), :libmpfr),
-                      Cint, (Ref{BigFloat}, Int32), c, MPFR.ROUNDING_MODE[])
+                      Cint, (Ref{BigFloat}, Int32), c, Base.MPFR.ROUNDING_MODE[])
                 return c
             end
         end : quote
