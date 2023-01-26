@@ -54,17 +54,32 @@ macro irrational(sym, val, def, T=Symbol(uppercasefirst(string(sym))))
     esym = esc(sym)
     qsym = esc(Expr(:quote, sym))
     eT = esc(T)
-    bigconvert = isa(def,Symbol) ? quote
-        function Base.BigFloat(::$eT, r::Base.MPFR.MPFRRoundingMode=Base.MPFR.ROUNDING_MODE[]; precision=precision(BigFloat))
-            c = BigFloat(; precision=precision)
-            ccall(($(string("mpfr_const_", def)), :libmpfr),
-                  Cint, (Ref{BigFloat}, Base.MPFR.MPFRRoundingMode), c, r)
-            return c
+    bigconvert = if VERSION < v"1.1.0-DEV.683"
+        # support older Julia versions prior to https://github.com/JuliaLang/julia/pull/29157
+        isa(def,Symbol) ? quote
+            function Base.BigFloat(::$eT)
+                c = BigFloat()
+                ccall(($(string("mpfr_const_", def)), :libmpfr),
+                      Cint, (Ref{BigFloat}, Int32), c, MPFR.ROUNDING_MODE[])
+                return c
+            end
+        end : quote
+            Base.BigFloat(::$eT) = $(esc(def))
         end
-    end : quote
-        function Base.BigFloat(::$eT; precision=precision(BigFloat))
-            setprecision(BigFloat, precision) do
-                $(esc(def))
+    else
+        # newer Julia versions
+        isa(def, Symbol) ? quote
+            function Base.BigFloat(::$eT, r::Base.MPFR.MPFRRoundingMode=Base.MPFR.ROUNDING_MODE[]; precision=precision(BigFloat))
+                c = BigFloat(; precision=precision)
+                ccall(($(string("mpfr_const_", def)), :libmpfr),
+                      Cint, (Ref{BigFloat}, Base.MPFR.MPFRRoundingMode), c, r)
+                return c
+            end
+        end : quote
+            function Base.BigFloat(::$eT; precision=precision(BigFloat))
+                setprecision(BigFloat, precision) do
+                    $(esc(def))
+                end
             end
         end
     end
