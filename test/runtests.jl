@@ -14,7 +14,7 @@ end
   @test isapprox(4/pi, fourinvπ)
 end
 
-@testset "1/(k*pi)" begin  
+@testset "1/(k*pi)" begin
   @test isapprox(1/(2pi), inv2π)
   @test isapprox(1/(4pi), inv4π)
 end
@@ -40,3 +40,18 @@ end
   @test isapprox(log(4pi), log4π)
 end
 
+@testset "inv" begin
+  for (a,b) in [
+    (twoπ, inv2π),
+    (fourπ, inv4π),
+    (halfπ, twoinvπ),
+    (quartπ, fourinvπ),
+    (sqrt2π, invsqrt2π),
+    (sqrt2, invsqrt2),
+    ]
+    @test a^-1 == inv(a) == b
+    @test b^-1 == inv(b) == a
+    @test a*b == 1
+    @test b*a == 1
+  end
+end
