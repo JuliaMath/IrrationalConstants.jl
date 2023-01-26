@@ -43,6 +43,11 @@ julia> IrrationalConstants.@irrational sqrt2  1.4142135623730950488  √big(2)
 julia> sqrt2
 sqrt2 = 1.4142135623730...
 
+julia> IrrationalConstants.@irrational halfτ  3.14159265358979323846  pi
+
+julia> halfτ
+halfτ = 3.1415926535897...
+
 julia> IrrationalConstants.@irrational sqrt2  1.4142135623730950488  big(2)
 ERROR: AssertionError: big($(Expr(:escape, :sqrt2))) isa BigFloat
 
