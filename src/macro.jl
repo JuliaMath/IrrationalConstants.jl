@@ -36,7 +36,7 @@ end
     @irrational(sym, val, def[, T])
 
 Define a new singleton type `T` representing an irrational constant as subtype of
-`AbstractIrrational` with an instance named `sym`, pre-computed `Float64` value `val`,
+`IrrationalConstants.IrrationalConstant <: AbstractIrrational` with an instance named `sym`, pre-computed `Float64` value `val`,
 and arbitrary-precision definition in terms of `BigFloat`s given by the expression `def`.
 
 As default, `T` is set to `sym` with the first character converted to uppercase.
