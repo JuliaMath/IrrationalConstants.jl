@@ -135,3 +135,28 @@ end
   @test twoπ/ComplexF32(2) isa ComplexF32
   @test log(twoπ, ComplexF32(2)) isa ComplexF32
 end
+
+@testset "trigonometric functions" begin
+  # 2π, 4π
+  for (n, x) in ((2, twoπ), (4, fourπ))
+    @test sin(x) === sinpi(n) === sin(0.0)
+    @test cos(x) === cospi(n) === cos(0.0)
+  end
+
+  # halfπ, quartπ
+  for (r, x) in ((1 // 2, halfπ), (1 // 4, quartπ))
+    @test sin(x) === sinpi(r)
+    @test cos(x) === cospi(r)
+  end
+
+  for x in (twoπ, fourπ, halfπ, quartπ)
+    # Check consistency of definitions
+    @test sincos(x) === (sin(x), cos(x))
+    @test tan(x) === sin(x) / cos(x)
+
+    # These are defined automatically via sin, cos, and tan
+    @test csc(x) === inv(sin(x)) === csc(0.0)
+    @test sec(x) === inv(cos(x)) === sec(0.0)
+    @test cot(x) === inv(tan(x)) === cot(0.0)
+  end
+end

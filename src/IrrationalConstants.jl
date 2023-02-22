@@ -28,5 +28,6 @@ export
 
 include("macro.jl")
 include("stats.jl")
+include("trigonometric.jl")
 
 end # module
