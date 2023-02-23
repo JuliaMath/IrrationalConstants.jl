@@ -48,10 +48,8 @@ end
 end
 
 @testset "hash" begin
-    for i in (twoπ, invπ, sqrt2, logtwo)
-        for j in (twoπ, invπ, sqrt2, logtwo)
-            @test isequal(i==j, hash(i)==hash(j))
-        end
+    for i in (twoπ, invπ, sqrt2, logtwo), j in (twoπ, invπ, sqrt2, logtwo)
+        @test isequal(i==j, hash(i)==hash(j))
     end
 end
 
