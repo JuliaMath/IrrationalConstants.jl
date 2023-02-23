@@ -57,7 +57,7 @@ end
 
 @testset "doctests" begin
     DocMeta.setdocmeta!(
-    IrrationalConstants, :DocTestSetup, :(using IrrationalConstants); recursive=true
+        IrrationalConstants, :DocTestSetup, :(using IrrationalConstants); recursive=true
     )
     doctest(IrrationalConstants; manual=false)
 end
