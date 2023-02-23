@@ -16,6 +16,7 @@ Base.:(==)(::T, ::T) where {T<:IrrationalConstant} = true
 Base.:<(::T, ::T) where {T<:IrrationalConstant} = false
 Base.:<=(::T, ::T) where {T<:IrrationalConstant} = true
 Base.hash(x::IrrationalConstant, h::UInt) = 3*objectid(x) - h
+Base.round(x::IrrationalConstant, r::RoundingMode) = round(float(x), r)
 
 # definitions for AbstractIrrational added in https://github.com/JuliaLang/julia/pull/34773
 if VERSION < v"1.5.0-DEV.301"
