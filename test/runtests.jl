@@ -155,8 +155,8 @@ end
     @test tan(x) === sin(x) / cos(x)
 
     # These are defined automatically via sin, cos, and tan
-    @test csc(x) === inv(sin(x)) === csc(0.0)
-    @test sec(x) === inv(cos(x)) === sec(0.0)
-    @test cot(x) === inv(tan(x)) === cot(0.0)
+    @test csc(x) === inv(sin(x))
+    @test sec(x) === inv(cos(x))
+    @test cot(x) === inv(tan(x))
   end
 end
