@@ -71,15 +71,13 @@ end
 end
 
 @testset "IrrationalConstants compared with IrrationalConstants" begin
-    for i in (twoπ, invπ, sqrt2, logtwo)
-        for j in (twoπ, invπ, sqrt2, logtwo)
-            @test isequal(i==j, Float64(i)==Float64(j))
-            @test isequal(i!=j, Float64(i)!=Float64(j))
-            @test isequal(i<=j, Float64(i)<=Float64(j))
-            @test isequal(i>=j, Float64(i)>=Float64(j))
-            @test isequal(i<j, Float64(i)<Float64(j))
-            @test isequal(i>j, Float64(i)>Float64(j))
-        end
+    for i in (twoπ, invπ, sqrt2, logtwo), j in (twoπ, invπ, sqrt2, logtwo)
+        @test isequal(i==j, Float64(i)==Float64(j))
+        @test isequal(i!=j, Float64(i)!=Float64(j))
+        @test isequal(i<=j, Float64(i)<=Float64(j))
+        @test isequal(i>=j, Float64(i)>=Float64(j))
+        @test isequal(i<j, Float64(i)<Float64(j))
+        @test isequal(i>j, Float64(i)>Float64(j))
     end
 end
 
