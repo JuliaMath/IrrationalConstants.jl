@@ -144,9 +144,9 @@ end
   end
 
   # halfπ, quartπ
-  for (r, x) in ((1 // 2, halfπ), (1 // 4, quartπ))
-    @test sin(x) === sinpi(r)
-    @test cos(x) === cospi(r)
+  for (r, x) in ((big"0.5", halfπ), (big"0.25", quartπ))
+    @test sin(x) === Float64(sinpi(r))
+    @test cos(x) === Float64(cospi(r))
   end
 
   for x in (twoπ, fourπ, halfπ, quartπ)
