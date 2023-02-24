@@ -3,21 +3,21 @@ using Documenter
 using Test
 
 @testset "k*pi" begin
-    @test isapprox(2 * pi, twoπ)
-    @test isapprox(4 * pi, fourπ)
-    @test isapprox(pi / 2, halfπ)
-    @test isapprox(pi / 4, quartπ)
+    @test isapprox(2*pi, twoπ)
+    @test isapprox(4*pi, fourπ)
+    @test isapprox(pi/2, halfπ)
+    @test isapprox(pi/4, quartπ)
 end
 
 @testset "k/pi" begin
-    @test isapprox(1 / pi, invπ)
-    @test isapprox(2 / pi, twoinvπ)
-    @test isapprox(4 / pi, fourinvπ)
+    @test isapprox(1/pi, invπ)
+    @test isapprox(2/pi, twoinvπ)
+    @test isapprox(4/pi, fourinvπ)
 end
 
-@testset "1/(k*pi)" begin
-    @test isapprox(1 / (2pi), inv2π)
-    @test isapprox(1 / (4pi), inv4π)
+@testset "1/(k*pi)" begin  
+    @test isapprox(1/(2pi), inv2π)
+    @test isapprox(1/(4pi), inv4π)
 end
 
 @testset "sqrt" begin
@@ -26,14 +26,14 @@ end
     @test isapprox(sqrt(pi), sqrtπ)
     @test isapprox(sqrt(2pi), sqrt2π)
     @test isapprox(sqrt(4pi), sqrt4π)
-    @test isapprox(sqrt(pi / 2), sqrthalfπ)
-    @test isapprox(sqrt(1 / 2), invsqrt2)
-    @test isapprox(sqrt(1 / (pi)), invsqrtπ)
-    @test isapprox(sqrt(1 / (2pi)), invsqrt2π)
+    @test isapprox(sqrt(pi/2), sqrthalfπ)
+    @test isapprox(sqrt(1/2), invsqrt2)
+    @test isapprox(sqrt(1/(pi)), invsqrtπ)
+    @test isapprox(sqrt(1/(2pi)), invsqrt2π)
 end
 
 @testset "log" begin
-    @test isapprox(log(1 / 2), loghalf)
+    @test isapprox(log(1/2), loghalf)
     @test isapprox(log(2), logtwo)
     @test isapprox(log(10), logten)
     @test isapprox(log(pi), logπ)
@@ -49,7 +49,7 @@ end
 
 @testset "hash" begin
     for i in (twoπ, invπ, sqrt2, logtwo), j in (twoπ, invπ, sqrt2, logtwo)
-        @test isequal(i == j, hash(i) == hash(j))
+        @test isequal(i==j, hash(i)==hash(j))
     end
 end
 
@@ -72,12 +72,12 @@ end
 
 @testset "IrrationalConstants compared with IrrationalConstants" begin
     for i in (twoπ, invπ, sqrt2, logtwo), j in (twoπ, invπ, sqrt2, logtwo)
-        @test isequal(i == j, Float64(i) == Float64(j))
-        @test isequal(i != j, Float64(i) != Float64(j))
-        @test isequal(i <= j, Float64(i) <= Float64(j))
-        @test isequal(i >= j, Float64(i) >= Float64(j))
-        @test isequal(i < j, Float64(i) < Float64(j))
-        @test isequal(i > j, Float64(i) > Float64(j))
+        @test isequal(i==j, Float64(i)==Float64(j))
+        @test isequal(i!=j, Float64(i)!=Float64(j))
+        @test isequal(i<=j, Float64(i)<=Float64(j))
+        @test isequal(i>=j, Float64(i)>=Float64(j))
+        @test isequal(i<j, Float64(i)<Float64(j))
+        @test isequal(i>j, Float64(i)>Float64(j))
     end
 end
 
@@ -105,9 +105,9 @@ end
     @test !(prevfloat(big(twoπ)) > twoπ)
     @test !(nextfloat(big(twoπ)) < twoπ)
 
-    @test 5293386250278608690 // 842468587426513207 < twoπ
-    @test !(5293386250278608690 // 842468587426513207 > twoπ)
-    @test 5293386250278608690 // 842468587426513207 != twoπ
+    @test 5293386250278608690//842468587426513207 < twoπ
+    @test !(5293386250278608690//842468587426513207 > twoπ)
+    @test 5293386250278608690//842468587426513207 != twoπ
 end
 IrrationalConstants.@irrational i46051 4863.185427757 1548big(pi)
 @testset "IrrationalConstant printing" begin
@@ -119,16 +119,16 @@ IrrationalConstants.@irrational i46051 4863.185427757 1548big(pi)
 end
 
 @testset "IrrationalConstant/Bool multiplication" begin
-    @test false * twoπ === 0.0
-    @test twoπ * false === 0.0
-    @test true * twoπ === Float64(twoπ)
-    @test twoπ * true === Float64(twoπ)
+    @test false*twoπ === 0.0
+    @test twoπ*false === 0.0
+    @test true*twoπ === Float64(twoπ)
+    @test twoπ*true === Float64(twoπ)
 end
 
 # JuliaLang/Julia issue #26324
 @testset "irrational promotion" begin
-    @test twoπ * ComplexF32(2) isa ComplexF32
-    @test twoπ / ComplexF32(2) isa ComplexF32
+    @test twoπ*ComplexF32(2) isa ComplexF32
+    @test twoπ/ComplexF32(2) isa ComplexF32
     @test log(twoπ, ComplexF32(2)) isa ComplexF32
 end
 
