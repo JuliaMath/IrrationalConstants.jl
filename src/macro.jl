@@ -4,6 +4,8 @@
 
 abstract type IrrationalConstant <: AbstractIrrational end
 
+# TODO: Remove definitions if they become available for `AbstractIrrational` in Base
+# Ref https://github.com/JuliaLang/julia/pull/48768
 function Base.show(io::IO, ::MIME"text/plain", x::IrrationalConstant)
     if get(io, :compact, false)::Bool
         print(io, x)
@@ -16,6 +18,7 @@ Base.:(==)(::T, ::T) where {T<:IrrationalConstant} = true
 Base.:<(::T, ::T) where {T<:IrrationalConstant} = false
 Base.:<=(::T, ::T) where {T<:IrrationalConstant} = true
 Base.hash(x::IrrationalConstant, h::UInt) = 3*objectid(x) - h
+Base.round(x::IrrationalConstant, r::RoundingMode) = round(float(x), r)
 
 # definitions for AbstractIrrational added in https://github.com/JuliaLang/julia/pull/34773
 if VERSION < v"1.5.0-DEV.301"
