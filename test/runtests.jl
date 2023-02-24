@@ -131,3 +131,15 @@ end
     @test twoπ/ComplexF32(2) isa ComplexF32
     @test log(twoπ, ComplexF32(2)) isa ComplexF32
 end
+
+# issue #23
+@testset "rounding irrationals" begin
+    for mode in (RoundDown, RoundToZero, RoundNearest, RoundNearestTiesAway, RoundNearestTiesUp)
+        @test @inferred(round(twoπ, mode)) == 6.0
+        @test @inferred(round(sqrt2, mode)) == 1.0
+    end
+    @test @inferred(round(sqrt3, RoundUp)) == 2.0
+    for mode in (RoundUp, RoundToZero)
+        @test @inferred(round(loghalf, mode)) == 0.0
+    end
+end

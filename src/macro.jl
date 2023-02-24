@@ -4,6 +4,8 @@
 
 abstract type IrrationalConstant <: AbstractIrrational end
 
+# TODO: Remove definitions if they become available for `AbstractIrrational` in Base
+# Ref https://github.com/JuliaLang/julia/pull/48768
 function Base.show(io::IO, ::MIME"text/plain", x::IrrationalConstant)
     if get(io, :compact, false)::Bool
         print(io, x)
