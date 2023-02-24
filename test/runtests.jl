@@ -152,26 +152,26 @@ end
 end
 
 @testset "trigonometric functions" begin
-  # 2π, 4π
-  for (n, x) in ((2, twoπ), (4, fourπ))
-    @test sin(x) === sinpi(n) === sin(0.0)
-    @test cos(x) === cospi(n) === cos(0.0)
-  end
+    # 2π, 4π
+    for (n, x) in ((2, twoπ), (4, fourπ))
+        @test sin(x) === sinpi(n) === sin(0.0) === Float64(sin(big(x)))
+        @test cos(x) === cospi(n) === cos(0.0) === Float64(cos(big(x)))
+    end
 
-  # halfπ, quartπ
-  for (r, x) in ((big"0.5", halfπ), (big"0.25", quartπ))
-    @test sin(x) === Float64(sinpi(r))
-    @test cos(x) === Float64(cospi(r))
-  end
+    # halfπ, quartπ
+    for (r, x) in ((big"0.5", halfπ), (big"0.25", quartπ))
+        @test sin(x) === Float64(sinpi(r))
+        @test cos(x) === Float64(cospi(r))
+    end
 
-  for x in (twoπ, fourπ, halfπ, quartπ)
-    # Check consistency of definitions
-    @test sincos(x) === (sin(x), cos(x))
-    @test tan(x) === sin(x) / cos(x)
+    for x in (twoπ, fourπ, halfπ, quartπ)
+        # Check consistency of definitions
+        @test sincos(x) === (sin(x), cos(x))
+        @test tan(x) === sin(x) / cos(x)
 
-    # These are defined automatically via sin, cos, and tan
-    @test csc(x) === inv(sin(x))
-    @test sec(x) === inv(cos(x))
-    @test cot(x) === inv(tan(x))
-  end
+        # These are defined automatically via sin, cos, and tan
+        @test csc(x) === Float64(csc(big(x)))
+        @test sec(x) === Float64(sec(big(x)))
+        @test cot(x) === csc(x) / sec(x)
+    end
 end

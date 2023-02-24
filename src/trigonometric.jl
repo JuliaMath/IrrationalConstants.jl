@@ -27,3 +27,8 @@ Base.tan(::Twoπ) = 0.0
 Base.tan(::Fourπ) = 0.0
 Base.tan(::Halfπ) = 1/0
 Base.tan(::Quartπ) = 1.0
+
+# `csc`, `sec`, and `cot` are defined automatically, so we do not define them
+# there is one exception where we can improve accuracy:
+Base.csc(::Quartπ) = Float64(sqrt2)
+Base.sec(::Quartπ) = Float64(sqrt2)
