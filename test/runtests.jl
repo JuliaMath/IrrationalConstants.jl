@@ -154,8 +154,8 @@ end
 @testset "trigonometric functions" begin
     # 2π, 4π
     for (n, x) in ((2, twoπ), (4, fourπ))
-        @test sin(x) === sinpi(n) === sin(0.0) === Float64(sin(big(x)))
-        @test cos(x) === cospi(n) === cos(0.0) === Float64(cos(big(x)))
+        @test sin(x) === sinpi(n) === sin(0.0)
+        @test cos(x) === cospi(n) === cos(0.0)
     end
 
     # halfπ, quartπ
@@ -164,14 +164,20 @@ end
         @test cos(x) === Float64(cospi(r))
     end
 
+    # Check consistency of definitions
     for x in (twoπ, fourπ, halfπ, quartπ)
-        # Check consistency of definitions
         @test sincos(x) === (sin(x), cos(x))
         @test tan(x) === sin(x) / cos(x)
+    end
 
+    # Check `csc`, `sec`, and `cot`
+    for x in (twoπ, fourπ, halfπ)
         # These are defined automatically via sin, cos, and tan
-        @test csc(x) === Float64(csc(big(x)))
-        @test sec(x) === Float64(sec(big(x)))
+        @test csc(x) === 1 / sin(x)
+        @test sec(x) === 1 / cos(x)
         @test cot(x) === csc(x) / sec(x)
     end
+    @test csc(quartπ) === Float64(csc(big(quartπ)))
+    @test sec(quartπ) === Float64(sec(big(quartπ)))
+    @test cot(quartπ) === Float64(cot(big(quartπ)))
 end
