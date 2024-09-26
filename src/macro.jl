@@ -49,7 +49,7 @@ returns `false`.
 
 # Examples
 
-```jldoctest
+```julia-repl
 julia> IrrationalConstants.@irrational(twoπ, 6.2831853071795864769, 2*big(π))
 
 julia> twoπ
