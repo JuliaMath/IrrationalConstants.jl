@@ -33,4 +33,4 @@ log2π      # log(2π)
 log4π      # log(4π)
 ```
 
-Pedantic note: even though these constants are instances of `AbstractIrrational`, the rationality of some of them is not known. This is the case, for example, with `logπ`.
+Pedantic note: even though these constants are instances of `AbstractIrrational`, the irrationality of some of them is not known. This is the case, for example, with `logπ`.
