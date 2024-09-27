@@ -4,7 +4,7 @@
 [![Coverage](https://codecov.io/gh/JuliaMath/IrrationalConstants.jl/branch/main/graph/badge.svg)](https://codecov.io/gh/JuliaMath/IrrationalConstants.jl)
 [![Coverage](https://coveralls.io/repos/github/JuliaMath/IrrationalConstants.jl/badge.svg?branch=main)](https://coveralls.io/github/JuliaMath/IrrationalConstants.jl?branch=main)
 
-This package defines the following irrational constants:
+This package defines the following `AbstractIrrational` constants:
 
 ```julia
 twoπ       # 2π
@@ -33,3 +33,4 @@ log2π      # log(2π)
 log4π      # log(4π)
 ```
 
+Pedantic note: even though these constants are instances of `AbstractIrrational`, the irrationality of some of them is not known. This is the case, for example, with `logπ`.
