@@ -2,6 +2,11 @@ using IrrationalConstants
 using Documenter
 using Test
 
+const ALLCONSTANTS = filter!(
+    x -> x isa IrrationalConstants.IrrationalConstant,
+    map(Base.Fix1(getproperty, IrrationalConstants), names(IrrationalConstants)),
+)
+
 @testset "k*pi" begin
     @test isapprox(2*pi, twoπ)
     @test isapprox(4*pi, fourπ)
@@ -48,30 +53,47 @@ end
 end
 
 @testset "hash" begin
-    for i in (twoπ, invπ, sqrt2, logtwo), j in (twoπ, invπ, sqrt2, logtwo)
+    for i in ALLCONSTANTS, j in ALLCONSTANTS
         @test isequal(i==j, hash(i)==hash(j))
     end
 end
 
 @testset "doctests" begin
-    DocMeta.setdocmeta!(
-        IrrationalConstants, :DocTestSetup, :(using IrrationalConstants); recursive=true
-    )
     doctest(IrrationalConstants; manual=false)
 end
 
 # copied from https://github.com/JuliaLang/julia/blob/cf5ae0369ceae078cf6a29d7aa34f48a5a53531e/test/numbers.jl
 # and adapted to irrationals in this package
 
-@testset "IrrationalConstant zero and one" begin
-    @test one(twoπ) === true
-    @test zero(twoπ) === false
-    @test one(typeof(twoπ)) === true
-    @test zero(typeof(twoπ)) === false
+@testset "IrrationalConstants zero and one" begin
+    for i in ALLCONSTANTS
+        @test one(i) === true
+        @test zero(i) === false
+        @test one(typeof(i)) === true
+        @test zero(typeof(i)) === false
+    end
+end
+
+@testset "IrrationalConstants iszero, isfinite, isinteger, and isone" begin
+    for i in ALLCONSTANTS
+        @test !iszero(i)
+        @test !isone(i)
+        @test !isinteger(i)
+        @test isfinite(i)
+    end
+end
+
+@testset "IrrationalConstants promote_type" begin
+    for T in (Float16, Float32, Float64)
+        for i in ALLCONSTANTS
+            @test T(2.0) * i ≈ T(2.0) * T(i)
+            @test T(2.0) * i isa T
+        end
+    end
 end
 
 @testset "IrrationalConstants compared with IrrationalConstants" begin
-    for i in (twoπ, invπ, sqrt2, logtwo), j in (twoπ, invπ, sqrt2, logtwo)
+    for i in ALLCONSTANTS, j in ALLCONSTANTS
         @test isequal(i==j, Float64(i)==Float64(j))
         @test isequal(i!=j, Float64(i)!=Float64(j))
         @test isequal(i<=j, Float64(i)<=Float64(j))
@@ -81,29 +103,31 @@ end
     end
 end
 
-@testset "IrrationalConstant Inverses, JuliaLang/Julia Issue #30882" begin
+@testset "IrrationalConstants Inverses, JuliaLang/Julia Issue #30882" begin
     @test @inferred(inv(twoπ)) ≈ 0.15915494309189535
 end
 
 @testset "IrrationalConstants compared with Rationals and Floats" begin
-    @test Float64(twoπ, RoundDown) < twoπ
-    @test Float64(twoπ, RoundUp) > twoπ
-    @test !(Float64(twoπ, RoundDown) > twoπ)
-    @test !(Float64(twoπ, RoundUp) < twoπ)
-    @test Float64(twoπ, RoundDown) <= twoπ
-    @test Float64(twoπ, RoundUp) >= twoπ
-    @test Float64(twoπ, RoundDown) != twoπ
-    @test Float64(twoπ, RoundUp) != twoπ
+    for i in ALLCONSTANTS
+        @test Float64(i, RoundDown) < i
+        @test Float64(i, RoundUp) > i
+        @test !(Float64(i, RoundDown) > i)
+        @test !(Float64(i, RoundUp) < i)
+        @test Float64(i, RoundDown) <= i
+        @test Float64(i, RoundUp) >= i
+        @test Float64(i, RoundDown) != i
+        @test Float64(i, RoundUp) != i
 
-    @test Float32(twoπ, RoundDown) < twoπ
-    @test Float32(twoπ, RoundUp) > twoπ
-    @test !(Float32(twoπ, RoundDown) > twoπ)
-    @test !(Float32(twoπ, RoundUp) < twoπ)
+        @test Float32(i, RoundDown) < i
+        @test Float32(i, RoundUp) > i
+        @test !(Float32(i, RoundDown) > i)
+        @test !(Float32(i, RoundUp) < i)
 
-    @test prevfloat(big(twoπ)) < twoπ
-    @test nextfloat(big(twoπ)) > twoπ
-    @test !(prevfloat(big(twoπ)) > twoπ)
-    @test !(nextfloat(big(twoπ)) < twoπ)
+        @test prevfloat(big(i)) < i
+        @test nextfloat(big(i)) > i
+        @test !(prevfloat(big(i)) > i)
+        @test !(nextfloat(big(i)) < i)
+    end
 
     @test 5293386250278608690//842468587426513207 < twoπ
     @test !(5293386250278608690//842468587426513207 > twoπ)
@@ -180,4 +204,54 @@ end
     @test csc(quartπ) === Float64(csc(big(quartπ)))
     @test sec(quartπ) === Float64(sec(big(quartπ)))
     @test cot(quartπ) === Float64(cot(big(quartπ)))
+end
+
+# Ref https://github.com/JuliaLang/julia/pull/46054
+IrrationalConstants.@irrational irrational_1548_pi 4863.185427757 1548big(pi)
+IrrationalConstants.@irrational irrational_inv_1548_pi 1/big(irrational_1548_pi)
+@testset "IrrationalConstants.@irrational" begin
+    @test irrational_1548_pi ≈ 1548big(pi)
+    @test Float64(irrational_1548_pi) == 1548π
+    @test irrational_1548_pi ≈ 1548pi
+    @test irrational_1548_pi != 1548pi
+    @test irrational_inv_1548_pi ≈ inv(1548big(pi))
+    @test Float64(irrational_inv_1548_pi) == 1/(1548π)
+    @test irrational_inv_1548_pi ≈ inv(1548pi)
+    @test irrational_inv_1548_pi != inv(1548pi)
+end
+
+# Ref https://github.com/JuliaLang/julia/pull/50894
+@testset "irrational special values" begin
+    for v ∈ ALLCONSTANTS
+        @test v === typemin(v) === typemax(v)
+    end
+end
+
+# Ref https://github.com/JuliaLang/julia/pull/55911
+@testset "logtwo to `BigFloat` with `setrounding`" begin
+    function irrational_to_big_float(c::AbstractIrrational)
+        BigFloat(c)
+    end
+
+    function irrational_to_big_float_with_rounding_mode(c::AbstractIrrational, rm::RoundingMode)
+        f = () -> irrational_to_big_float(c)
+        setrounding(f, BigFloat, rm)
+    end
+
+    function irrational_to_big_float_with_rounding_mode_and_precision(c::AbstractIrrational, rm::RoundingMode, prec::Int)
+        f = () -> irrational_to_big_float_with_rounding_mode(c, rm)
+        setprecision(f, BigFloat, prec)
+    end
+
+    # Prior to https://github.com/JuliaLang/julia/pull/40872 `setprecision(BigFloat, precision)` required precision >= 2
+    minprecision = VERSION < v"1.8.0-DEV.367" ? 2 : 1
+
+    # logtwo is the only constant defined based on an MPFR constant (similar to π, γ, catalan)
+    c = logtwo
+    for p ∈ minprecision:40
+        @test (
+            irrational_to_big_float_with_rounding_mode_and_precision(c, RoundDown, p) < c <
+            irrational_to_big_float_with_rounding_mode_and_precision(c, RoundUp, p)
+        )
+    end
 end
