@@ -135,5 +135,32 @@ function irrational(sym::Symbol, val::Union{Float64,Expr}, def::Union{Symbol,Exp
         @assert isa(big($esym), BigFloat)
         @assert Float64($esym) == Float64(big($esym))
         @assert Float32($esym) == Float32(big($esym))
+
+        # https://github.com/JuliaLang/julia/pull/55886 removed these effects for generic `AbstractIrrational` subtypes
+        @static if isdefined(Base, :_throw_argument_error_irrational_to_rational_bigint)
+            function Base.Rational{$BigInt}(::$eT)
+                Base._throw_argument_error_irrational_to_rational_bigint()
+            end
+        end
+        @static if isdefined(Base, :_irrational_to_rational)
+            Base.@assume_effects :foldable function Base.Rational{T}(x::$eT) where {T<:Integer}
+                Base._irrational_to_rational(T, x)
+            end
+        end
+        @static if isdefined(Base, :_irrational_to_float)
+            Base.@assume_effects :foldable function (::Type{T})(x::$eT, r::RoundingMode) where {T<:Union{Float32,Float64}}
+                Base._irrational_to_float(T, x, r)
+            end
+        end
+        @static if isdefined(Base, :_rationalize_irrational)
+            Base.@assume_effects :foldable function Base.rationalize(::Type{T}, x::$eT; tol::Real=0) where {T<:Integer}
+                Base._rationalize_irrational(T, x, tol)
+            end
+        end
+        @static if isdefined(Base, :_lessrational)
+            Base.@assume_effects :foldable function Base.lessrational(rx::Rational, x::$eT)
+                Base._lessrational(rx, x)
+            end
+        end
     end
 end

@@ -255,3 +255,8 @@ end
         )
     end
 end
+
+# issues #37 and #40
+@testset "slow comparisons" begin
+    @test iszero(@allocated(3.0 <= invsqrt2))
+end

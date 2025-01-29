@@ -1,7 +1,7 @@
 name = "IrrationalConstants"
 uuid = "92d709cd-6900-40b7-9082-c6be49f344b6"
 authors = ["JuliaMath"]
-version = "0.2.3"
+version = "0.2.4"
 
 [compat]
 julia = "1"
