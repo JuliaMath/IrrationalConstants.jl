@@ -181,3 +181,8 @@ end
     @test sec(quartπ) === Float64(sec(big(quartπ)))
     @test cot(quartπ) === Float64(cot(big(quartπ)))
 end
+
+# issues #37 and #40
+@testset "slow comparisons" begin
+    @test iszero(@allocated(3.0 <= invsqrt2))
+end
