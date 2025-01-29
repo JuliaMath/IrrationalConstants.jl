@@ -34,13 +34,19 @@ if VERSION < v"1.2.0-DEV.337"
     Base.inv(x::IrrationalConstant) = 1/x
 end
 
-"""
-    @irrational sym val def [T]
-    @irrational(sym, val, def[, T])
+# https://github.com/JuliaLang/julia/pull/50894
+Base.typemin(::Type{T}) where {T<:IrrationalConstant} = T()
+Base.typemax(::Type{T}) where {T<:IrrationalConstant} = T()
 
-Define a new singleton type `T` representing an irrational constant as subtype of
-`IrrationalConstants.IrrationalConstant <: AbstractIrrational` with an instance named `sym`, pre-computed `Float64` value `val`,
-and arbitrary-precision definition in terms of `BigFloat`s given by the expression `def`.
+"""
+    @irrational sym [val] def [T]
+
+Define an instance named `sym` of a new singleton type `T` representing an irrational constant as subtype of
+`IrrationalConstants.IrrationalConstant <: AbstractIrrational`,
+with arbitrary-precision definition in terms of `BigFloat`s given by the expression `def`.
+
+Optionally provide a pre-computed `Float64` value `val` which must equal `Float64(def)`.
+It will be computed automatically if omitted.
 
 As default, `T` is set to `sym` with the first character converted to uppercase.
 
@@ -49,30 +55,36 @@ returns `false`.
 
 # Examples
 
-```jldoctest
-julia> IrrationalConstants.@irrational(twoπ, 6.2831853071795864769, 2*big(π))
+```jldoctest; setup = :(import IrrationalConstants)
+julia> IrrationalConstants.@irrational twoπ 2*big(π)
 
 julia> twoπ
 twoπ = 6.2831853071795...
 
-julia> IrrationalConstants.@irrational sqrt2  1.4142135623730950488  √big(2)
+julia> IrrationalConstants.@irrational sqrt2 1.4142135623730950488 √big(2)
 
 julia> sqrt2
 sqrt2 = 1.4142135623730...
 
-julia> IrrationalConstants.@irrational halfτ  3.14159265358979323846  pi
+julia> IrrationalConstants.@irrational halfτ 3.14159265358979323846 pi
 
 julia> halfτ
 halfτ = 3.1415926535897...
 
-julia> IrrationalConstants.@irrational sqrt2  1.4142135623730950488  big(2)
-ERROR: AssertionError: big($(Expr(:escape, :sqrt2))) isa BigFloat
+julia> IrrationalConstants.@irrational sqrt3 1.7320508075688772 big(3)
+ERROR: AssertionError: big($(Expr(:escape, :sqrt3))) isa BigFloat
 
-julia> IrrationalConstants.@irrational sqrt2  1.41421356237309  √big(2)
-ERROR: AssertionError: Float64($(Expr(:escape, :sqrt2))) == Float64(big($(Expr(:escape, :sqrt2))))
+julia> IrrationalConstants.@irrational sqrt5 2.2360679775 √big(5)
+ERROR: AssertionError: Float64($(Expr(:escape, :sqrt5))) == Float64(big($(Expr(:escape, :sqrt5))))
 ```
 """
-macro irrational(sym, val, def, T=Symbol(uppercasefirst(string(sym))))
+macro irrational(sym::Symbol, val::Float64, def::Union{Symbol,Expr}, T::Symbol=Symbol(uppercasefirst(string(sym))))
+    irrational(sym, val, def, T)
+end
+macro irrational(sym::Symbol, def::Union{Symbol,Expr}, T::Symbol=Symbol(uppercasefirst(string(sym))))
+    irrational(sym, :(big($(esc(sym)))), def, T)
+end
+function irrational(sym::Symbol, val::Union{Float64,Expr}, def::Union{Symbol,Expr}, T::Symbol)
     esym = esc(sym)
     qsym = esc(Expr(:quote, sym))
     eT = esc(T)
@@ -90,17 +102,23 @@ macro irrational(sym, val, def, T=Symbol(uppercasefirst(string(sym))))
         end
     else
         # newer Julia versions
-        isa(def, Symbol) ? quote
-            function Base.BigFloat(::$eT, r::Base.MPFR.MPFRRoundingMode=Base.MPFR.ROUNDING_MODE[]; precision=precision(BigFloat))
-                c = BigFloat(; precision=precision)
-                ccall(($(string("mpfr_const_", def)), :libmpfr),
-                      Cint, (Ref{BigFloat}, Base.MPFR.MPFRRoundingMode), c, r)
-                return c
+        if isa(def, Symbol)
+            # support older Julia versions prior to https://github.com/JuliaLang/julia/pull/51362
+            r = VERSION < v"1.12.0-DEV.78" ? :(Base.MPFR.ROUNDING_MODE[]) : :(Base.Rounding.rounding_raw(BigFloat))
+            quote
+                function Base.BigFloat(::$eT, r::Base.MPFR.MPFRRoundingMode=$r; precision=precision(BigFloat))
+                    c = BigFloat(; precision=precision)
+                    ccall(($(string("mpfr_const_", def)), :libmpfr),
+                          Cint, (Ref{BigFloat}, Base.MPFR.MPFRRoundingMode), c, r)
+                    return c
+                end
             end
-        end : quote
-            function Base.BigFloat(::$eT; precision=precision(BigFloat))
-                setprecision(BigFloat, precision) do
-                    $(esc(def))
+        else
+            quote
+                function Base.BigFloat(::$eT; precision=precision(BigFloat))
+                    setprecision(BigFloat, precision) do
+                        $(esc(def))
+                    end
                 end
             end
         end
@@ -109,8 +127,10 @@ macro irrational(sym, val, def, T=Symbol(uppercasefirst(string(sym))))
         struct $T <: IrrationalConstant end
         const $esym = $eT()
         $bigconvert
-        Base.Float64(::$eT) = $val
-        Base.Float32(::$eT) = $(Float32(val))
+        let v = $val, v64 = Float64(v), v32 = Float32(v)
+            Base.Float64(::$eT) = v64
+            Base.Float32(::$eT) = v32
+        end
         Base.show(io::IO, ::$eT) = print(io, $qsym)
         @assert isa(big($esym), BigFloat)
         @assert Float64($esym) == Float64(big($esym))
