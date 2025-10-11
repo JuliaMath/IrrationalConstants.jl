@@ -71,6 +71,9 @@ macro irrational(sym::Symbol, def::Union{Symbol,Expr}, T::Symbol=Symbol(uppercas
     irrational(sym, :(big($(esc(sym)))), def, T)
 end
 function irrational(sym::Symbol, val::Union{Float64,Expr}, def::Union{Symbol,Expr}, T::Symbol)
+    if sym == T
+        throw(ArgumentError("The name of the irrational constant ($sym) and its type ($T) cannot be the same. Please choose a different name for the constant or specify a different type name as the last argument to the macro."))
+    end
     esym = esc(sym)
     qsym = esc(Expr(:quote, sym))
     eT = esc(T)
