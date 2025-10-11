@@ -264,3 +264,16 @@ end
     @test_throws err_type macroexpand(@__MODULE__, :(IrrationalConstants.@irrational Myπ big(π) Myπ))
     @test_throws err_type macroexpand(@__MODULE__, :(IrrationalConstants.@irrational Myπ 1.0 big(π) Myπ))
 end
+
+# test that defining a type that already exists throws an error
+module TestTypeCollision
+    using IrrationalConstants
+    using Test
+
+    @testset "type collision" begin
+        err_type = VERSION < v"1.3" ? LoadError : ArgumentError
+        struct MyExistingType end
+        @test_throws err_type macroexpand(@__MODULE__, :(IrrationalConstants.@irrational myconst big(π) MyExistingType))
+        @test_throws err_type macroexpand(@__MODULE__, :(IrrationalConstants.@irrational myconst 1.0 big(π) MyExistingType))
+    end
+end
