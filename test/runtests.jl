@@ -273,6 +273,7 @@ module TestTypeCollision
 
     @testset "type collision" begin
         err_type = VERSION < v"1.3" ? LoadError : ArgumentError
+        @test_throws err_type macroexpand(@__MODULE__, :(IrrationalConstants.@irrational myExistingType big(π) MyExistingType))
         @test_throws err_type macroexpand(@__MODULE__, :(IrrationalConstants.@irrational myconst big(π) MyExistingType))
         @test_throws err_type macroexpand(@__MODULE__, :(IrrationalConstants.@irrational myconst 1.0 big(π) MyExistingType))
     end
