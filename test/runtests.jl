@@ -258,7 +258,9 @@ end
     @test iszero(@allocated(3.0 <= invsqrt2))
 end
 
+# issues #43
 @testset "macro error" begin
-    @test_throws ArgumentError macroexpand(@__MODULE__, :(IrrationalConstants.@irrational Myπ big(π) Myπ))
-    @test_throws ArgumentError macroexpand(@__MODULE__, :(IrrationalConstants.@irrational Myπ 1.0 big(π) Myπ))
+    err_type = VERSION < v"1.3" ? LoadError : ArgumentError
+    @test_throws err_type macroexpand(@__MODULE__, :(IrrationalConstants.@irrational Myπ big(π) Myπ))
+    @test_throws err_type macroexpand(@__MODULE__, :(IrrationalConstants.@irrational Myπ 1.0 big(π) Myπ))
 end
