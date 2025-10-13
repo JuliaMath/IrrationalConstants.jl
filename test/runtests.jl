@@ -260,9 +260,14 @@ end
 
 # issues #43
 @testset "macro error" begin
-    err_type = VERSION < v"1.3" ? LoadError : ArgumentError
-    @test_throws err_type @macroexpand(IrrationalConstants.@irrational Myπ big(π) Myπ)
-    @test_throws err_type @macroexpand(IrrationalConstants.@irrational Myπ 1.0 big(π) Myπ)
+    if VERSION < v"1.3"
+        @test_throws LoadError @macroexpand(IrrationalConstants.@irrational Myπ big(π) Myπ)
+        @test_throws LoadError @macroexpand(IrrationalConstants.@irrational Myπ 1.0 big(π) Myπ)
+    else
+        msg = "The name of the irrational constant (Myπ) and its type (Myπ) cannot be the same. Please choose a different name for the constant or specify a different type name as the last argument to the macro."
+        @test_throws ArgumentError(msg) @macroexpand(IrrationalConstants.@irrational Myπ big(π) Myπ)
+        @test_throws ArgumentError(msg) @macroexpand(IrrationalConstants.@irrational Myπ 1.0 big(π) Myπ)
+    end
 end
 
 # test that defining a type that already exists throws an error
@@ -272,9 +277,16 @@ module TestTypeCollision
     struct MyExistingType end
 
     @testset "type collision" begin
-        err_type = VERSION < v"1.3" ? LoadError : ArgumentError
-        @test_throws err_type @macroexpand(IrrationalConstants.@irrational myExistingType big(π) MyExistingType)
-        @test_throws err_type @macroexpand(IrrationalConstants.@irrational myconst big(π) MyExistingType)
-        @test_throws err_type @macroexpand(IrrationalConstants.@irrational myconst 1.0 big(π) MyExistingType)
+        if VERSION < v"1.3"
+            @test_throws LoadError @macroexpand(IrrationalConstants.@irrational myExistingType big(π))
+            @test_throws LoadError @macroexpand(IrrationalConstants.@irrational myconst big(π) MyExistingType)
+            @test_throws LoadError @macroexpand(IrrationalConstants.@irrational myconst 1.0 big(π) MyExistingType)
+        else
+            msg1 = "Type `MyExistingType` of irrational constant `myExistingType` is already defined in module `Main.TestTypeCollision`."
+            @test_throws ArgumentError(msg1) @macroexpand(IrrationalConstants.@irrational myExistingType big(π))
+            msg2 = "Type `MyExistingType` of irrational constant `myconst` is already defined in module `Main.TestTypeCollision`."
+            @test_throws ArgumentError(msg2) @macroexpand(IrrationalConstants.@irrational myconst big(π) MyExistingType)
+            @test_throws ArgumentError(msg2) @macroexpand(IrrationalConstants.@irrational myconst 1.0 big(π) MyExistingType)
+        end
     end
 end
