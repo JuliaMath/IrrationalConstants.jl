@@ -261,6 +261,8 @@ end
 # issues #43
 @testset "macro error" begin
     msg = "The name of the irrational constant (Myπ) and its type (Myπ) cannot be the same. Please choose a different name for the constant or specify a different type name as the last argument to the macro."
+    @test_throws ArgumentError(msg) @macroexpand(IrrationalConstants.@irrational Myπ big(π))
+    @test_throws ArgumentError(msg) @macroexpand(IrrationalConstants.@irrational Myπ 1.0 big(π))
     @test_throws ArgumentError(msg) @macroexpand(IrrationalConstants.@irrational Myπ big(π) Myπ)
     @test_throws ArgumentError(msg) @macroexpand(IrrationalConstants.@irrational Myπ 1.0 big(π) Myπ)
 end
