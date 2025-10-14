@@ -78,7 +78,7 @@ function irrational(mod::Module, sym::Symbol, val::Union{Float64,Expr}, def::Uni
         throw(ArgumentError(LazyString("Type `", T, "` of irrational constant `", sym, "` is already defined in module `", mod, "`.")))
     end
     if sym == T
-        throw(ArgumentError("The name of the irrational constant ($sym) and its type ($T) cannot be the same. Please choose a different name for the constant or specify a different type name as the last argument to the macro."))
+        throw(ArgumentError(LazyString("The name of the irrational constant (", sym, ") and its type (", T, ") cannot be the same. Please choose a different name for the constant or specify a different type name as the last argument to the macro.")))
     end
     esym = esc(sym)
     qsym = esc(Expr(:quote, sym))
