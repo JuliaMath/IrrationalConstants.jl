@@ -47,6 +47,9 @@ julia> IrrationalConstants.@irrational twoπ 2*big(π)
 julia> twoπ
 twoπ = 6.2831853071795...
 
+julia> typeof(twoπ)
+Twoπ
+
 julia> IrrationalConstants.@irrational sqrt2 1.4142135623730950488 √big(2)
 
 julia> sqrt2
@@ -65,12 +68,18 @@ ERROR: AssertionError: Float64($(Expr(:escape, :sqrt5))) == Float64(big($(Expr(:
 ```
 """
 macro irrational(sym::Symbol, val::Float64, def::Union{Symbol,Expr}, T::Symbol=Symbol(uppercasefirst(string(sym))))
-    irrational(sym, val, def, T)
+    irrational(__module__, sym, val, def, T)
 end
 macro irrational(sym::Symbol, def::Union{Symbol,Expr}, T::Symbol=Symbol(uppercasefirst(string(sym))))
-    irrational(sym, :(big($(esc(sym)))), def, T)
+    irrational(__module__, sym, :(big($(esc(sym)))), def, T)
 end
-function irrational(sym::Symbol, val::Union{Float64,Expr}, def::Union{Symbol,Expr}, T::Symbol)
+function irrational(mod::Module, sym::Symbol, val::Union{Float64,Expr}, def::Union{Symbol,Expr}, T::Symbol)
+    if isdefined(mod, T)
+        throw(ArgumentError(LazyString("Type `", T, "` of irrational constant `", sym, "` is already defined in module `", mod, "`.")))
+    end
+    if sym == T
+        throw(ArgumentError(LazyString("The name of the irrational constant (", sym, ") and its type (", T, ") cannot be the same. Please choose a different name for the constant or specify a different type name as the last argument to the macro.")))
+    end
     esym = esc(sym)
     qsym = esc(Expr(:quote, sym))
     eT = esc(T)

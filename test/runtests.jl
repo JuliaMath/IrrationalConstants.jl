@@ -257,3 +257,27 @@ end
 @testset "slow comparisons" begin
     @test iszero(@allocated(3.0 <= invsqrt2))
 end
+
+# issues #43
+@testset "macro error" begin
+    msg = "The name of the irrational constant (Myπ) and its type (Myπ) cannot be the same. Please choose a different name for the constant or specify a different type name as the last argument to the macro."
+    @test_throws ArgumentError(msg) @macroexpand(IrrationalConstants.@irrational Myπ big(π))
+    @test_throws ArgumentError(msg) @macroexpand(IrrationalConstants.@irrational Myπ 1.0 big(π))
+    @test_throws ArgumentError(msg) @macroexpand(IrrationalConstants.@irrational Myπ big(π) Myπ)
+    @test_throws ArgumentError(msg) @macroexpand(IrrationalConstants.@irrational Myπ 1.0 big(π) Myπ)
+end
+
+# test that defining a type that already exists throws an error
+module TestTypeCollision
+    using IrrationalConstants
+    using Test
+    struct MyExistingType end
+
+    @testset "type collision" begin
+        msg1 = "Type `MyExistingType` of irrational constant `myExistingType` is already defined in module `Main.TestTypeCollision`."
+        @test_throws ArgumentError(msg1) @macroexpand(IrrationalConstants.@irrational myExistingType big(π))
+        msg2 = "Type `MyExistingType` of irrational constant `myconst` is already defined in module `Main.TestTypeCollision`."
+        @test_throws ArgumentError(msg2) @macroexpand(IrrationalConstants.@irrational myconst big(π) MyExistingType)
+        @test_throws ArgumentError(msg2) @macroexpand(IrrationalConstants.@irrational myconst 1.0 big(π) MyExistingType)
+    end
+end
