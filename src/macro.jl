@@ -20,20 +20,6 @@ Base.:<=(::T, ::T) where {T<:IrrationalConstant} = true
 Base.hash(x::IrrationalConstant, h::UInt) = 3*objectid(x) - h
 Base.round(x::IrrationalConstant, r::RoundingMode) = round(float(x), r)
 
-# definitions for AbstractIrrational added in https://github.com/JuliaLang/julia/pull/34773
-if VERSION < v"1.5.0-DEV.301"
-    Base.zero(::IrrationalConstant) = false
-    Base.zero(::Type{<:IrrationalConstant}) = false
-
-    Base.one(::IrrationalConstant) = true
-    Base.one(::Type{<:IrrationalConstant}) = true
-end
-
-# definition for AbstractIrrational added in https://github.com/JuliaLang/julia/pull/31068
-if VERSION < v"1.2.0-DEV.337"
-    Base.inv(x::IrrationalConstant) = 1/x
-end
-
 # https://github.com/JuliaLang/julia/pull/50894
 Base.typemin(::Type{T}) where {T<:IrrationalConstant} = T()
 Base.typemax(::Type{T}) where {T<:IrrationalConstant} = T()
@@ -88,37 +74,22 @@ function irrational(sym::Symbol, val::Union{Float64,Expr}, def::Union{Symbol,Exp
     esym = esc(sym)
     qsym = esc(Expr(:quote, sym))
     eT = esc(T)
-    bigconvert = if VERSION < v"1.1.0-DEV.683"
-        # support older Julia versions prior to https://github.com/JuliaLang/julia/pull/29157
-        isa(def,Symbol) ? quote
-            function Base.BigFloat(::$eT)
-                c = BigFloat()
+    bigconvert = if isa(def, Symbol)
+        # support older Julia versions prior to https://github.com/JuliaLang/julia/pull/51362
+        r = VERSION < v"1.12.0-DEV.78" ? :(Base.MPFR.ROUNDING_MODE[]) : :(Base.Rounding.rounding_raw(BigFloat))
+        quote
+            function Base.BigFloat(::$eT, r::Base.MPFR.MPFRRoundingMode=$r; precision=precision(BigFloat))
+                c = BigFloat(; precision=precision)
                 ccall(($(string("mpfr_const_", def)), :libmpfr),
-                      Cint, (Ref{BigFloat}, Int32), c, Base.MPFR.ROUNDING_MODE[])
+                      Cint, (Ref{BigFloat}, Base.MPFR.MPFRRoundingMode), c, r)
                 return c
             end
-        end : quote
-            Base.BigFloat(::$eT) = $(esc(def))
         end
     else
-        # newer Julia versions
-        if isa(def, Symbol)
-            # support older Julia versions prior to https://github.com/JuliaLang/julia/pull/51362
-            r = VERSION < v"1.12.0-DEV.78" ? :(Base.MPFR.ROUNDING_MODE[]) : :(Base.Rounding.rounding_raw(BigFloat))
-            quote
-                function Base.BigFloat(::$eT, r::Base.MPFR.MPFRRoundingMode=$r; precision=precision(BigFloat))
-                    c = BigFloat(; precision=precision)
-                    ccall(($(string("mpfr_const_", def)), :libmpfr),
-                          Cint, (Ref{BigFloat}, Base.MPFR.MPFRRoundingMode), c, r)
-                    return c
-                end
-            end
-        else
-            quote
-                function Base.BigFloat(::$eT; precision=precision(BigFloat))
-                    setprecision(BigFloat, precision) do
-                        $(esc(def))
-                    end
+        quote
+            function Base.BigFloat(::$eT; precision=precision(BigFloat))
+                setprecision(BigFloat, precision) do
+                    $(esc(def))
                 end
             end
         end

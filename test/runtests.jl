@@ -243,12 +243,9 @@ end
         setprecision(f, BigFloat, prec)
     end
 
-    # Prior to https://github.com/JuliaLang/julia/pull/40872 `setprecision(BigFloat, precision)` required precision >= 2
-    minprecision = VERSION < v"1.8.0-DEV.367" ? 2 : 1
-
     # logtwo is the only constant defined based on an MPFR constant (similar to π, γ, catalan)
     c = logtwo
-    for p ∈ minprecision:40
+    for p ∈ 1:40
         @test (
             irrational_to_big_float_with_rounding_mode_and_precision(c, RoundDown, p) < c <
             irrational_to_big_float_with_rounding_mode_and_precision(c, RoundUp, p)
