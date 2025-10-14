@@ -75,7 +75,7 @@ macro irrational(sym::Symbol, def::Union{Symbol,Expr}, T::Symbol=Symbol(uppercas
 end
 function irrational(mod::Module, sym::Symbol, val::Union{Float64,Expr}, def::Union{Symbol,Expr}, T::Symbol)
     if isdefined(mod, T)
-        throw(ArgumentError("Type `$T` of irrational constant `$sym` is already defined in module `$mod`."))
+        throw(ArgumentError(LazyString("Type `", T, "` of irrational constant `", sym, "` is already defined in module `", mod, "`.")))
     end
     if sym == T
         throw(ArgumentError("The name of the irrational constant ($sym) and its type ($T) cannot be the same. Please choose a different name for the constant or specify a different type name as the last argument to the macro."))
