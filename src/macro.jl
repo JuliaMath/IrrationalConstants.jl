@@ -89,7 +89,7 @@ function irrational(mod::Module, sym::Symbol, val::Union{Float64,Expr}, def::Uni
         quote
             function Base.BigFloat(::$eT, r::Base.MPFR.MPFRRoundingMode=$r; precision=precision(BigFloat))
                 c = BigFloat(; precision=precision)
-                ccall(($(string("mpfr_const_", def)), :libmpfr),
+                ccall(($(string("mpfr_const_", def)), Base.MPFR.libmpfr),
                       Cint, (Ref{BigFloat}, Base.MPFR.MPFRRoundingMode), c, r)
                 return c
             end
