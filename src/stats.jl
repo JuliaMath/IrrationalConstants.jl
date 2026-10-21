@@ -23,7 +23,7 @@
 @irrational invsqrt2π inv(sqrt(2 * big(π)))
 
 @irrational loghalf log(inv(big(2)))
-@irrational logtwo log2
+@irrational logtwo log(big(2))
 @irrational logten log(big(10))
 @irrational logπ log(big(π))
 @irrational log2π log(2 * big(π))
