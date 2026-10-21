@@ -220,6 +220,14 @@ IrrationalConstants.@irrational irrational_inv_1548_pi 1/big(irrational_1548_pi)
     @test irrational_inv_1548_pi != inv(1548pi)
 end
 
+# Constant defined based on an MPFR constant (similar to π, γ, catalan in Base)
+IrrationalConstants.@irrational irrational_mpfr_log2 0.6931471805599453 log2
+@testset "IrrationalConstants.@irrational with MPFR constant" begin
+    @test BigFloat(irrational_mpfr_log2) == log(big(2))
+    @test precision(BigFloat(irrational_mpfr_log2; precision=100)) == 100
+    @test BigFloat(irrational_mpfr_log2; precision=100) == setprecision(() -> log(big(2)), BigFloat, 100)
+end
+
 # Ref https://github.com/JuliaLang/julia/pull/50894
 @testset "irrational special values" begin
     for v ∈ ALLCONSTANTS
@@ -228,7 +236,7 @@ end
 end
 
 # Ref https://github.com/JuliaLang/julia/pull/55911
-@testset "logtwo to `BigFloat` with `setrounding`" begin
+@testset "$c to `BigFloat` with `setrounding`" for c in (logtwo, irrational_mpfr_log2)
     function irrational_to_big_float(c::AbstractIrrational)
         BigFloat(c)
     end
@@ -243,8 +251,6 @@ end
         setprecision(f, BigFloat, prec)
     end
 
-    # logtwo is the only constant defined based on an MPFR constant (similar to π, γ, catalan)
-    c = logtwo
     for p ∈ 1:40
         @test (
             irrational_to_big_float_with_rounding_mode_and_precision(c, RoundDown, p) < c <
